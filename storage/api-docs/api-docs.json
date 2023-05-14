@@ -1,0 +1,552 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "ToDO API Documentation",
+        "description": "API Documentation - ToDo",
+        "contact": {
+            "email": "simonishah63@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login",
+                "description": "Login by email, password",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 6,
+                                        "example": "User@123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logged In Successfully!"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "401": {
+                        "description": "The provided credentials are incorrect."
+                    },
+                    "422": {
+                        "description": "The given data was invalid."
+                    }
+                }
+            }
+        },
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register User",
+                "description": "Register New User",
+                "operationId": "register",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Jhon Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 255,
+                                        "example": "jhondoe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 6,
+                                        "example": "123456"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User Registered and Logged in Successfully!"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout",
+                "description": "Logout",
+                "operationId": "logout",
+                "parameters": [
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "application/json",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "application/json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Logout"
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/task": {
+            "get": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Fetch task with notes",
+                "description": "Provide list of task along with notes",
+                "operationId": "task",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Task status",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "New"
+                    },
+                    {
+                        "name": "priority",
+                        "in": "query",
+                        "description": "Task priority",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "High"
+                    },
+                    {
+                        "name": "due_date",
+                        "in": "query",
+                        "description": "Due Date of Task",
+                        "schema": {
+                            "type": "date"
+                        },
+                        "example": "2023-05-29"
+                    },
+                    {
+                        "name": "notes",
+                        "in": "query",
+                        "description": "Retrieve tasks which have minimum one note attached",
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "example": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task fetched successfully!'",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/tasksList"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Create New Task",
+                "description": "Create New Task",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/taskAdd"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "New Task Created Successfully!'",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/tasksList"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "The given data was invalid."
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "tasksList": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Task"
+                    },
+                    {
+                        "properties": {
+                            "notes": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Note"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "taskAdd": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Task"
+                    },
+                    {
+                        "properties": {
+                            "notes": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "subject": {
+                                            "description": "Note Subject",
+                                            "type": "string",
+                                            "maxLength": 255,
+                                            "example": "Note 1"
+                                        },
+                                        "note": {
+                                            "description": "Note Description",
+                                            "type": "text",
+                                            "maxLength": 5000,
+                                            "example": "Description of the note"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "Note": {
+                "required": [
+                    "subject"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "subject": {
+                        "description": "Note Subject",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Note 1"
+                    },
+                    "note": {
+                        "description": "Note Description",
+                        "type": "text",
+                        "maxLength": 5000,
+                        "example": "Description of the note"
+                    },
+                    "attachment": {
+                        "description": "Note Attachment",
+                        "type": "array",
+                        "items": {
+                            "description": "Attachment Url",
+                            "type": "string",
+                            "example": "image.png"
+                        }
+                    },
+                    "created_at": {
+                        "description": "Initial creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Note"
+                }
+            },
+            "Task": {
+                "required": [
+                    "subject",
+                    "start_date",
+                    "due_date",
+                    "status",
+                    "priority"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "subject": {
+                        "description": "Task Subject",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Task 1"
+                    },
+                    "description": {
+                        "description": "Task Description",
+                        "type": "text",
+                        "maxLength": 5000,
+                        "example": "Description of the task"
+                    },
+                    "start_date": {
+                        "description": "Date of task start",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-05-14"
+                    },
+                    "due_date": {
+                        "description": "Date of task end",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-05-30"
+                    },
+                    "status": {
+                        "description": "Task status",
+                        "type": "string",
+                        "enum": [
+                            "New",
+                            "Incomplete",
+                            "Complete"
+                        ],
+                        "example": "New"
+                    },
+                    "priority": {
+                        "description": "Task priority",
+                        "type": "string",
+                        "enum": [
+                            "High",
+                            "Medium",
+                            "Low"
+                        ],
+                        "example": "High"
+                    },
+                    "created_at": {
+                        "description": "Initial creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Task"
+                }
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "ToDo Api",
+            "description": "API Endpoints of todo Api"
+        }
+    ]
+}
