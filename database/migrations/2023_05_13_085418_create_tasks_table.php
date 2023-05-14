@@ -18,7 +18,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->date('start_date');
             $table->date('due_date');
-            $table->enum('status', ['New', 'Incomplete', 'Complete']);
+            $table->enum('status', ['New', 'Incomplete', 'Complete'])->index();
             $table->enum('priority', ['High', 'Medium', 'Low']);
             $table->timestamps();
             $table->softDeletes();
