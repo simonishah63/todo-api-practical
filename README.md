@@ -41,7 +41,7 @@ Generate a new application key
 
 ## Database seeding
 
-**Populate the database with seed data with relationships which includes users, books and roles. This can help you to quickly start testing the api or couple a frontend and start using it with ready content.**
+**Populate the database with seed data with relationships which includes users, tasks and notes. This can help you to quickly start testing the api or couple a frontend and start using it with ready content.**
 
 Run the database seeder and you're done
 
@@ -60,7 +60,8 @@ The api can be accessed at [http://127.0.0.1:8000/api](http://127.0.0.1:8000/api
 ## Test User Login Credentials
 
 Email: user@gmail.com
-Password: User@123ß
+
+Password: User@123
 
 ## API Documentation
 
